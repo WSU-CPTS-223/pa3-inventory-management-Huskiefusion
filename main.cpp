@@ -1,5 +1,8 @@
 #include <iostream>
+#include <fstream>
 #include <string>
+#include "linkedList.hpp"
+#include "listing.hpp"
 
 using namespace std;
 
@@ -53,6 +56,17 @@ void bootStrap()
 int main(int argc, char const *argv[])
 {
     string line;
+    // make a hashmap with the uniqId as key, store product
+    // make a hashmap with the category as key, store list of products
+    //read the data set
+    ifstream dataFile("lib/data.csv");
+    while(getline(dataFile, line)){
+        //cout << line << endl;
+    }
+    
+
+
+
     bootStrap();
     while (getline(cin, line) && line != ":quit")
     {

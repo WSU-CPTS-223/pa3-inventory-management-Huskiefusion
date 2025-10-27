@@ -2,3 +2,4 @@ mainexe.dSYM/
 .DS_Store
 bin/
 *.csv
+.vscode/

@@ -1,4 +1,4 @@
-SRCS = main.cpp
+SRCS = main.cpp listing.cpp
 TARGETDEST = bin/
 TARGET = main
 
