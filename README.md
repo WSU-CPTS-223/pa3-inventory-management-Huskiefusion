@@ -6,4 +6,5 @@ We expect a fully functioninig command line REPL application for an inventory qu
 ### How to run the current skeleton code
 `make` will compile and execute the skeleton code
 
-Feel free to modify Makefile as you see fit.
+The application ships with the zip file containing the csv to minimize the size of the repo.
+Assuming your system can run the `unzip` command, it will be unzipped into lib/ on the first run.
