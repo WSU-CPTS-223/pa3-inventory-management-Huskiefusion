@@ -1,8 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <functional>
 #include <string>
 #include "linkedList.hpp"
 #include "listing.hpp"
+#include "hashTable.hpp"
 
 using namespace std;
 
@@ -59,14 +61,26 @@ int main(int argc, char const *argv[])
     // make a hashmap with the uniqId as key, store product
     // make a hashmap with the category as key, store list of products
     //read the data set
+    /*
+        * 10007 is the nearest prime to 10002
+        ...
+        * After some testing, I am going to make the table 20021 'units' long. 
+        * 10007 produced too many collisions.
+    */
     ifstream dataFile("lib/data.csv");
+
+    HashTable<string, ItemListing> listingTable(20021);
+    getline(dataFile, line); // clear the info line
     while(getline(dataFile, line)){
-        //cout << line << endl;
+        ItemListing item = ItemListing::fromString(line);
+        listingTable.insert(item.uniqId, item);
+        break;
     }
-    
+    // ItemListing it;
+    // listingTable.find("688395bec3dd1797d15119b5b14a631c", it);
+    // cout << it.productName << endl;
 
-
-
+    return 0;
     bootStrap();
     while (getline(cin, line) && line != ":quit")
     {

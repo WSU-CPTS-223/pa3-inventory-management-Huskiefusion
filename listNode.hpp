@@ -1,15 +1,26 @@
 #pragma once
 #include <iostream>
 
-template <class T>
+template <class K, class V>
 class ListNode{
 public:
-    ListNode(T data=T()){ this->data=data; }
-    T getData() { return data; }
+    ListNode(K key=K(), V value=V()) : key(key), value(value) {}
+    //getters
+    V getValue() { return value; }
+    K getKey() { return key; }
     ListNode* getNext() { return pNext; }
-    void setData(T data) { this->data = data; }
-    void setNext(ListNode<T>* pNext) { this-pNext = pNext; }
+    // setters
+    void setValue(V value) { this->value = value; }
+    void setKey(K key) { this->key = key; }
+    void setNext(ListNode<K,V>* pNext) { this->pNext = pNext; }
 private:
-    T data;
-    ListNode* pNext;
+    K key;
+    V value;
+    ListNode<K, V>* pNext;
 };
+
+template <class K, class V>
+std::ostream& operator<<(std::ostream& lhs, ListNode<K, V>& rhs){
+    lhs << "(K: " << rhs.getKey() << ",V: "  <<  rhs.getValue() << ")";
+    return lhs;
+}

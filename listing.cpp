@@ -1,8 +1,60 @@
 #include "listing.hpp"
 
+using std::cout;
+using std::endl;
 ItemListing ItemListing::fromString(string line){
+    ItemListing tmp;
+    int index = line.find(","); // First, get the uniqID
+    tmp.uniqId = line.substr(0, index);
+    line.erase(0, index+1);
+    // now product name
+    if(line[0]=='\"'){
+        index = line.find("\",");
+        tmp.productName = line.substr(1, index-1); // start at 1 to remove quote mark, -1 to offest
+        line.erase(0, index+2); // +2 to clear the quote and the comma
+    }
+    else{
+        index = line.find(",");
+        tmp.productName = line.substr(0, index);
+        line.erase(0, index+1); // +1 to clear the comma
+    }
+    // brand name (it doesnt actually exist for any of them)
+    index = line.find(",");
+    tmp.asin = (index==0)? "NA" : line.substr(0, index);
+    line.erase(0, index+1);
+
+
+    // fix the formatting of the name (eg. "" and '', maybe others?)
+    // now we do the asin (this also doesnt exist for any of them)
+    index = line.find(",");
+    tmp.asin = (index==0)? "NA" : line.substr(0, index);
+    line.erase(0, index+1);
+
+    // now for category, this should maybe be a list?
+    string categoryString;
+    if(line[0]=='\"'){
+        index = line.find("\",");
+        categoryString = line.substr(1, index-1); // start at 1 to remove quote mark, -1 to offest
+        line.erase(0, index+2); // +2 to clear the quote and the comma
+    }
+    else{
+        index = line.find(",");
+        categoryString = line.substr(0, index);
+        line.erase(0, index+1); // +1 to clear the comma
+    }
     
-    return ItemListing();
+    index=categoryString.find(" | ");
+    while(index!=-1){
+        cout << categoryString.substr(0, index) << endl;
+        categoryString.erase(0, index+3);
+        index=categoryString.find(" | ");
+    }
+
+
+    cout << categoryString << endl;
+    
+    //while()
+    return tmp;
 }
 
 ItemListing::ItemListing(){ // default
@@ -135,4 +187,9 @@ bool ItemListing::operator<(ItemListing& rhs){
 }
 bool ItemListing::operator>(ItemListing& rhs){
     return uniqId > rhs.uniqId; 
+}
+
+std::ostream& operator<<(std::ostream& lhs, ItemListing& rhs){
+    lhs << rhs.uniqId <<", "<< rhs.productName << ", " << rhs.category;
+    return lhs;
 }
