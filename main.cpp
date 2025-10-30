@@ -3,8 +3,9 @@
 #include <functional>
 #include <string>
 #include "linkedList.hpp"
-#include "listing.hpp"
 #include "hashTable.hpp"
+#include "avlMap.hpp"
+#include "listing.hpp"
 
 using namespace std;
 
@@ -68,14 +69,34 @@ int main(int argc, char const *argv[])
         * 10007 produced too many collisions.
     */
     ifstream dataFile("lib/data.csv");
+    HashTable<string, ItemListing> listingTable(20021); // for the find function
+    // I could implement a vector-like class but LinkedList works well enough and is the same speed for what we're doing :)
+    AVLMap<string, LinkedList<string, ItemListing>> itemsByCategory; // for the category function
+    LinkedList<int, string> egg;
 
-    HashTable<string, ItemListing> listingTable(20021);
     getline(dataFile, line); // clear the info line
     while(getline(dataFile, line)){
         ItemListing item = ItemListing::fromString(line);
         listingTable.insert(item.uniqId, item);
-        break;
+        for(int i=0; i < item.categories.getLength(); i++){
+            LinkedList<string, ItemListing> tmp;
+            auto node = itemsByCategory.findNode(item.categories[i]->getKey());
+            if (node){
+                tmp = node->getValue();
+                tmp.pushFront(item.uniqId, item);
+                node->setValue(tmp);
+                //cout << item.categories[i]->getKey() << endl;
+            }
+            else{
+                tmp.pushFront(item.uniqId, item);
+                itemsByCategory.insert(item.categories[i]->getKey(), tmp);
+            }
+        }
     }
+    
+    LinkedList<string, ItemListing> toys;
+    itemsByCategory.find("Toys & Games", toys);
+    toys.print();
     // ItemListing it;
     // listingTable.find("688395bec3dd1797d15119b5b14a631c", it);
     // cout << it.productName << endl;

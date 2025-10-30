@@ -2,6 +2,7 @@
 
 using std::cout;
 using std::endl;
+
 ItemListing ItemListing::fromString(string line){
     ItemListing tmp;
     int index = line.find(","); // First, get the uniqID
@@ -42,18 +43,34 @@ ItemListing ItemListing::fromString(string line){
         categoryString = line.substr(0, index);
         line.erase(0, index+1); // +1 to clear the comma
     }
-    
+    tmp.category=categoryString; // this will remain unformatted
+
     index=categoryString.find(" | ");
     while(index!=-1){
-        cout << categoryString.substr(0, index) << endl;
+        // again, the value doesnt mean anything. This should be a vector but I can't be bothered to implement it
+        tmp.categories.pushFront(categoryString.substr(0, index), 0); 
         categoryString.erase(0, index+3);
         index=categoryString.find(" | ");
     }
+    if(categoryString.length() > 0) tmp.categories.pushFront(categoryString, 0); // the while loop skips the last value
+    else tmp.categories.pushFront("NA", 0); // there was no categories in the section
+    //upc Ean Code
+    index = line.find(",");
+    tmp.upcEanCode = (index==0)? "NA" : line.substr(0, index);
+    line.erase(0, index+1);
 
+    // list price (this never actually contains the price for some reason)
+    index = line.find(",");
+    tmp.listPrice = (index==0)? "NA" : line.substr(0, index);
+    line.erase(0, index+1);
+    // sku (this one is actually the price)
+    index = line.find(",");
+    tmp.sku = (index==0)? "NA" : line.substr(0, index);
+    line.erase(0, index+1);
 
-    cout << categoryString << endl;
-    
-    //while()
+    // The rest of the data wont be parsed into the object because it's useless to the project
+    // Honestly everything past categories was worthless
+
     return tmp;
 }
 
@@ -64,7 +81,7 @@ ItemListing::ItemListing(){ // default
     this->asin = "";
     this->category = "";
     this->upcEanCode = "";
-    this->ListPrice = "";
+    this->listPrice = "";
     this->sellingPrice = "";
     this->quantity = "";
     this->modelNumber = "";
@@ -88,14 +105,14 @@ ItemListing::ItemListing(){ // default
     this->productDescription = "";
 } // default 
 
-ItemListing::ItemListing(string uniqId, string productName, string brandName, string asin, string category, string upcEanCode, string ListPrice, string sellingPrice, string quantity, string modelNumber, string aboutProduct, string productSpecification, string technicalDetails, string shippingWeight, string productDimensions, string image, string variants, string sku, string productUrl, string stock, string productDetails, string dimensions, string color, string ingredients, string directionToUse, string isAmazonSeller, string sizeQuantityVariant, string productDescription){ // put some arguments
+ItemListing::ItemListing(string uniqId, string productName, string brandName, string asin, string category, string upcEanCode, string listPrice, string sellingPrice, string quantity, string modelNumber, string aboutProduct, string productSpecification, string technicalDetails, string shippingWeight, string productDimensions, string image, string variants, string sku, string productUrl, string stock, string productDetails, string dimensions, string color, string ingredients, string directionToUse, string isAmazonSeller, string sizeQuantityVariant, string productDescription){ // put some arguments
     this->uniqId = uniqId;
     this->productName = productName;
     this->brandName = brandName;
     this->asin = asin;
     this->category = category;
     this->upcEanCode = upcEanCode;
-    this->ListPrice = ListPrice;
+    this->listPrice = listPrice;
     this->sellingPrice = sellingPrice;
     this->quantity = quantity;
     this->modelNumber = modelNumber;
@@ -125,7 +142,7 @@ ItemListing::ItemListing(const ItemListing& obj){ // copy constructor
     this->asin = obj.asin;
     this->category = obj.category;
     this->upcEanCode = obj.upcEanCode;
-    this->ListPrice = obj.ListPrice;
+    this->listPrice = obj.listPrice;
     this->sellingPrice = obj.sellingPrice;
     this->quantity = obj.quantity;
     this->modelNumber = obj.modelNumber;
@@ -155,7 +172,7 @@ ItemListing& ItemListing::operator=(const ItemListing& obj){ // copy assignment
     this->asin = obj.asin;
     this->category = obj.category;
     this->upcEanCode = obj.upcEanCode;
-    this->ListPrice = obj.ListPrice;
+    this->listPrice = obj.listPrice;
     this->sellingPrice = obj.sellingPrice;
     this->quantity = obj.quantity;
     this->modelNumber = obj.modelNumber;
@@ -189,7 +206,8 @@ bool ItemListing::operator>(ItemListing& rhs){
     return uniqId > rhs.uniqId; 
 }
 
-std::ostream& operator<<(std::ostream& lhs, ItemListing& rhs){
-    lhs << rhs.uniqId <<", "<< rhs.productName << ", " << rhs.category;
+std::ostream& operator<<(std::ostream& lhs, const ItemListing& rhs){
+    lhs << "ID: " << rhs.uniqId <<", NAME: "<< rhs.productName << ", CATEGORIES: " << rhs.category;
     return lhs;
 }
+

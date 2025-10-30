@@ -8,3 +8,5 @@ We expect a fully functioninig command line REPL application for an inventory qu
 
 The application ships with the zip file containing the csv to minimize the size of the repo.
 Assuming your system can run the `unzip` command, it will be unzipped into lib/ on the first run.
+
+Only fields up to SKU will be populated, as anything other than Uniq ID, Product Name, and Categories are useless to this project.
