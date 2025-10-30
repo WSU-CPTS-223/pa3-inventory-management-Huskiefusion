@@ -2,10 +2,8 @@
 #include <fstream>
 #include <functional>
 #include <string>
-#include "linkedList.hpp"
-#include "hashTable.hpp"
-#include "avlMap.hpp"
-#include "listing.hpp"
+#include "inventoryManager.hpp"
+
 
 using namespace std;
 
@@ -25,7 +23,7 @@ bool validCommand(string line)
            (line.rfind("listInventory") == 0);
 }
 
-void evalCommand(string line)
+void evalCommand(string line, AmazonInventoryManager& man)
 {
     if (line == ":help")
     {
@@ -35,13 +33,25 @@ void evalCommand(string line)
     else if (line.rfind("find", 0) == 0)
     {
         // Look up the appropriate datastructure to find if the inventory exist
-        cout << "YET TO IMPLEMENT!" << endl;
+        if(line.find(' ') != line.npos){
+            string lookup = line.substr(line.find(' ')+1);
+            man.find(lookup);
+        }
+        else{
+            cout << "No ID provided!" << endl;
+        }
     }
     // if line starts with listInventory
     else if (line.rfind("listInventory") == 0)
     {
         // Look up the appropriate datastructure to find all inventory belonging to a specific category
-        cout << "YET TO IMPLEMENT!" << endl;
+        if(line.find(' ') != line.npos){
+            string lookup = line.substr(line.find(' ')+1);
+            man.listCategory(lookup);
+        }
+        else{
+            cout << "No category provided!" << endl;
+        }
     }
 }
 
@@ -68,46 +78,14 @@ int main(int argc, char const *argv[])
         * After some testing, I am going to make the table 20021 'units' long. 
         * 10007 produced too many collisions.
     */
-    ifstream dataFile("lib/data.csv");
-    HashTable<string, ItemListing> listingTable(20021); // for the find function
-    // I could implement a vector-like class but LinkedList works well enough and is the same speed for what we're doing :)
-    AVLMap<string, LinkedList<string, ItemListing>> itemsByCategory; // for the category function
-    LinkedList<int, string> egg;
+    AmazonInventoryManager amznInvManager;
 
-    getline(dataFile, line); // clear the info line
-    while(getline(dataFile, line)){
-        ItemListing item = ItemListing::fromString(line);
-        listingTable.insert(item.uniqId, item);
-        for(int i=0; i < item.categories.getLength(); i++){
-            LinkedList<string, ItemListing> tmp;
-            auto node = itemsByCategory.findNode(item.categories[i]->getKey());
-            if (node){
-                tmp = node->getValue();
-                tmp.pushFront(item.uniqId, item);
-                node->setValue(tmp);
-                //cout << item.categories[i]->getKey() << endl;
-            }
-            else{
-                tmp.pushFront(item.uniqId, item);
-                itemsByCategory.insert(item.categories[i]->getKey(), tmp);
-            }
-        }
-    }
-    
-    LinkedList<string, ItemListing> toys;
-    itemsByCategory.find("Toys & Games", toys);
-    toys.print();
-    // ItemListing it;
-    // listingTable.find("688395bec3dd1797d15119b5b14a631c", it);
-    // cout << it.productName << endl;
-
-    return 0;
     bootStrap();
     while (getline(cin, line) && line != ":quit")
     {
         if (validCommand(line))
         {
-            evalCommand(line);
+            evalCommand(line, amznInvManager);
         }
         else
         {

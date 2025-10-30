@@ -10,3 +10,5 @@ The application ships with the zip file containing the csv to minimize the size 
 Assuming your system can run the `unzip` command, it will be unzipped into lib/ on the first run.
 
 Only fields up to SKU will be populated, as anything other than Uniq ID, Product Name, and Categories are useless to this project.
+
+There is an item which has an unprintable character (ID: 2fc087697d6b94b83ba2856c32e58284, char: ). Due to how I ship the csv, I just remove it in the process of turning it into an object, but it could cause issues in other items' fields. No other item has this character in the product name.

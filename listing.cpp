@@ -19,13 +19,19 @@ ItemListing ItemListing::fromString(string line){
         tmp.productName = line.substr(0, index);
         line.erase(0, index+1); // +1 to clear the comma
     }
+    // remove extraneous character
+    // There is a single product with a weird character in the name, so do this to make it printable
+    if(tmp.productName.find("")!=tmp.productName.npos){
+        tmp.productName.erase(tmp.productName.find(""), 1); 
+    }
+
+
     // brand name (it doesnt actually exist for any of them)
     index = line.find(",");
-    tmp.asin = (index==0)? "NA" : line.substr(0, index);
+    tmp.brandName = (index==0)? "NA" : line.substr(0, index);
     line.erase(0, index+1);
 
 
-    // fix the formatting of the name (eg. "" and '', maybe others?)
     // now we do the asin (this also doesnt exist for any of them)
     index = line.find(",");
     tmp.asin = (index==0)? "NA" : line.substr(0, index);
