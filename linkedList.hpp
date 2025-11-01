@@ -57,9 +57,9 @@ public:
         return;
     }
 
-    ListNode<K,V>* operator[](const int& index){
+    ListNode<K,V>* operator[](const uint& index){
         ListNode<K, V>* pCur = pRoot;
-        for(int i=0; i< index; i++, pCur=pCur->getNext() ){
+        for(uint i=0; i< index; i++, pCur=pCur->getNext() ){
             if(pCur->getNext() == nullptr){
                 perror("ERROR: INDEX OUT OF BOUNDS");
                 return nullptr;

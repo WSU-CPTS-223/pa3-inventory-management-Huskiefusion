@@ -1,19 +1,25 @@
-SRCS = main.cpp listing.cpp 
+SRCS = listing.cpp 
 TARGETDEST = bin/
 TARGET = main
+ALT_TARGET = test
 
 default: execute
 
 out: clean compile execute
 
 compile: clean $(SRCS)
-	@g++ -g -Wall -std=c++14 $(SRCS) -o $(TARGETDEST)$(TARGET)
+	@g++ -g -Wall -std=c++14 main.cpp $(SRCS) -o $(TARGETDEST)$(TARGET)
+	@g++ -g -Wall -std=c++14 tests.cpp $(SRCS) -o $(TARGETDEST)$(ALT_TARGET)
 
 execute: lib/data.csv compile
 	@./$(TARGETDEST)$(TARGET)
 
+test: lib/data.csv compile
+	@./$(TARGETDEST)$(ALT_TARGET)
+
 clean:
-	@rm -f $(TARGET)
+	@rm -f $(TARGETDEST)$(TARGET)
+	@rm -f $(TARGETDEST)$(ALT_TARGET)
 
 lib/data.csv:
 	@echo No data.csv detected in lib/, unzipping...
