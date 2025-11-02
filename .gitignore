@@ -3,3 +3,4 @@ mainexe.dSYM/
 bin/
 *.csv
 .vscode/
+.idea/

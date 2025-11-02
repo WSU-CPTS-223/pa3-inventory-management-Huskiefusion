@@ -21,7 +21,6 @@ int main(int argc, char const *argv[]) {
     cout << "=== INSERTION PASSED ===" << endl;
 
     cout << "=== FIND TEST ===" << endl;
-    AVLMap<int, char> emptyMap;
     assert(map.find(1, tmp));
     assert(tmp=='a');
     assert(!map.find(4, tmp));
@@ -37,7 +36,6 @@ int main(int argc, char const *argv[]) {
 
     cout << "====== RUNNING LINKED LIST TESTS ======" << endl;
     LinkedList<int, char> list;
-    LinkedList<int, char> emptyList;
     cout << "=== PUSHFRONT TEST ===" << endl;
     list.pushFront(3, 'c');
     list.pushFront(2, 'b');
@@ -47,10 +45,28 @@ int main(int argc, char const *argv[]) {
     cout << "=== PUSHFRONT PASSED ===" << endl;
     assert(list.find(3, tmp));
     assert(tmp=='d');
+    assert(!list.find(4, tmp));
     // The operator[] function throws an error on out of bounds so testing it doenst work here
     cout << "====== FINISHED LINKED LIST TESTS ======" << endl;
 
     cout << "====== RUNNING HASH TABLE TESTS ======" << endl;
+    HashTable<int, char> table(19);
+    table.insert(1, 'a');
+    table.insert(2, 'b');
+    table.insert(3, 'c');
+
+    cout << "=== FIND TEST ===" << endl;
+    assert(table.find(2, tmp) && tmp == 'b');
+    assert(!table.find(4, tmp));
+    cout << "=== FIND PASSED ===" << endl;
+    
+    
+    cout << "=== REMOVE TEST ===" << endl;
+    assert(!table.remove(4));
+    assert(table.remove(2));
+    assert(!table.find(2, tmp));
+    cout << "=== REMOVE PASSED ===" << endl;
+    
     cout << "====== FINISHED HASH TABLE TESTS ======" << endl;
     cout << "============================" << endl << "*     ALL TESTS PASSED     *" << endl << "============================" << endl;
     

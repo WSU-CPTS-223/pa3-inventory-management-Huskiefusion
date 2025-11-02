@@ -7,6 +7,8 @@ default: execute
 
 out: clean compile execute
 
+all: clean compile
+
 compile: clean $(SRCS)
 	@g++ -g -Wall -std=c++14 main.cpp $(SRCS) -o $(TARGETDEST)$(TARGET)
 	@g++ -g -Wall -std=c++14 tests.cpp $(SRCS) -o $(TARGETDEST)$(ALT_TARGET)
