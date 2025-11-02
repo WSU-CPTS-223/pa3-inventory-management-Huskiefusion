@@ -13,4 +13,8 @@ Only fields up to SKU will be populated, as anything other than Uniq ID, Product
 
 There is an item which has an unprintable character (ID: 2fc087697d6b94b83ba2856c32e58284, char: ). Due to how I ship the csv, I just remove it in the process of turning it into an object, but it could cause issues in other items' fields. No other item has this character in the product name.
 
+Apparently mingw32-make wants Makefile to be all lowercase (eeg. makefile)? That was infuriating.
+
 Run tests with `make test`
+
+The pattern of testing I went with for each object was insertion, access/find, delete (if applicable), and find after delete. I chose this as it seemed like the most robust way to test the objects for faliure.
